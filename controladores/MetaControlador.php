@@ -84,4 +84,53 @@ class MetaControlador {
         echo json_encode($dados);
         exit();
     }
+
+    // Busca os dados de uma meta para edição
+    public function buscar(int $id) {
+        $meta = Meta::buscarPorId($id);
+        if ($meta && $meta->usuario_id === $this->usuario_id) {
+            $this->responderJSON(['sucesso' => true, 'dados' => $meta]);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Meta não encontrada.'], 404);
+        }
+    }
+
+    // Atualiza uma meta existente
+    public function atualizar(int $id) {
+        $meta = Meta::buscarPorId($id);
+        if (!$meta || $meta->usuario_id !== $this->usuario_id) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Meta não encontrada ou sem permissão.'], 404);
+            return;
+        }
+
+        $meta->pilar_id = (int)$_POST['pilar_id'] ?? $meta->pilar_id;
+        $meta->categoria_id = (int)$_POST['categoria_id'] ?? $meta->categoria_id;
+        $meta->subcategoria_id = !empty($_POST['subcategoria_id']) ? (int)$_POST['subcategoria_id'] : null;
+        $meta->nome = trim($_POST['nome']) ?? $meta->nome;
+        $meta->descricao = !empty($_POST['descricao']) ? trim($_POST['descricao']) : null;
+        $meta->data_inicio = $_POST['data_inicio'] ?? $meta->data_inicio;
+        $meta->data_fim = $_POST['data_fim'] ?? $meta->data_fim;
+        $meta->status = $_POST['status'] ?? $meta->status;
+
+        if ($meta->atualizar()) {
+            $this->responderJSON(['sucesso' => true, 'mensagem' => 'Meta atualizada com sucesso!']);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Ocorreu um erro ao atualizar a meta.'], 500);
+        }
+    }
+
+    // Deleta uma meta
+    public function deletar(int $id) {
+        $meta = Meta::buscarPorId($id);
+        if (!$meta || $meta->usuario_id !== $this->usuario_id) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Meta não encontrada ou sem permissão.'], 404);
+            return;
+        }
+
+        if (Meta::deletar($id)) {
+            $this->responderJSON(['sucesso' => true, 'mensagem' => 'Meta deletada com sucesso!']);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Ocorreu um erro ao deletar a meta.'], 500);
+        }
+    }
 }

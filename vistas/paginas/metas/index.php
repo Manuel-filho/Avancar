@@ -31,8 +31,14 @@
                 <div class="cartao-meta-rodape">
                     <span>Prazo: <?= date('d/m/Y', strtotime($meta->data_fim)) ?></span>
                     <div class="meta-acoes">
-                        <button class="botao-icone" title="Editar"><i class="fas fa-edit"></i></button>
-                        <button class="botao-icone" title="Deletar"><i class="fas fa-trash"></i></button>
+                        <button class="botao-icone botao-editar-meta" title="Editar Meta"
+                                data-meta-id="<?= $meta->id ?>"
+                                data-modal-alvo="modal-meta">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="botao-icone botao-deletar-meta" title="Deletar Meta" data-meta-id="<?= $meta->id ?>">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>

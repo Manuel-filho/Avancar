@@ -79,6 +79,15 @@ $roteamento->adicionar('GET', '/metas', function() {
 $roteamento->adicionar('POST', '/metas', function() {
     return (new MetaControlador())->armazenar();
 });
+$roteamento->adicionar('GET', '/metas/{id}', function($id) {
+    return (new MetaControlador())->buscar($id);
+});
+$roteamento->adicionar('POST', '/metas/{id}/atualizar', function($id) {
+    return (new MetaControlador())->atualizar($id);
+});
+$roteamento->adicionar('POST', '/metas/{id}/deletar', function($id) {
+    return (new MetaControlador())->deletar($id);
+});
 
 // Rota para listar todos os pilares
 $roteamento->adicionar('GET', '/pilares', function() {

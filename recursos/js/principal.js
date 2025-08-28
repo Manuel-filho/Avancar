@@ -356,4 +356,113 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         });
     }
+
+    // --- Lógica para Edição e Deleção de Metas ---
+    const botoesEditarMeta = document.querySelectorAll('.botao-editar-meta');
+    const botoesDeletarMeta = document.querySelectorAll('.botao-deletar-meta');
+    const formMeta = document.getElementById('formulario-meta');
+    const modalMeta = document.getElementById('modal-meta');
+    const tituloModalMeta = document.getElementById('modal-meta-titulo');
+
+    // Preparar para CRIAR
+    const botaoNovaMeta = document.getElementById('botao-nova-meta');
+    if (botaoNovaMeta) {
+        botaoNovaMeta.addEventListener('click', function() {
+            tituloModalMeta.textContent = 'Nova Meta';
+            formMeta.action = '/metas';
+            formMeta.reset();
+            document.getElementById('meta-id').value = '';
+            categoriaSelect.disabled = true;
+            subcategoriaSelect.disabled = true;
+        });
+    }
+
+    // Preparar para EDITAR
+    botoesEditarMeta.forEach(botao => {
+        botao.addEventListener('click', async function() {
+            const id = this.dataset.metaId;
+            tituloModalMeta.textContent = 'Editar Meta';
+            formMeta.action = `/metas/${id}/atualizar`;
+
+            // Buscar dados da meta
+            const resposta = await fetch(`/metas/${id}`);
+            const resultado = await resposta.json();
+
+            if (!resultado.sucesso) {
+                alert(resultado.mensagem || 'Erro ao buscar dados da meta.');
+                return;
+            }
+
+            const meta = resultado.dados;
+
+            // Preencher campos simples
+            formMeta.querySelector('#meta-id').value = meta.id;
+            formMeta.querySelector('#meta-nome').value = meta.nome;
+            formMeta.querySelector('#meta-descricao').value = meta.descricao;
+            formMeta.querySelector('#meta-data-inicio').value = meta.data_inicio;
+            formMeta.querySelector('#meta-data-fim').value = meta.data_fim;
+
+            // Preencher hierarquia em cascata
+            pilarSelect.value = meta.pilar_id;
+
+            // Dispara o change do pilar para carregar categorias
+            await carregarCategorias(meta.pilar_id, meta.categoria_id);
+
+            // Dispara o change da categoria para carregar subcategorias
+            if (meta.categoria_id) {
+                await carregarSubcategorias(meta.categoria_id, meta.subcategoria_id);
+            }
+        });
+    });
+
+    async function carregarCategorias(pilarId, categoriaIdParaSelecionar) {
+        categoriaSelect.innerHTML = '<option value="">Carregando...</option>';
+        const resposta = await fetch(`/pilares/${pilarId}/categorias`);
+        const resultado = await resposta.json();
+
+        categoriaSelect.innerHTML = '<option value="">Selecione uma Categoria...</option>';
+        if (resultado.sucesso) {
+            resultado.dados.forEach(c => categoriaSelect.add(new Option(c.nome, c.id)));
+            categoriaSelect.disabled = false;
+            if (categoriaIdParaSelecionar) {
+                categoriaSelect.value = categoriaIdParaSelecionar;
+            }
+        }
+    }
+
+    async function carregarSubcategorias(categoriaId, subcategoriaIdParaSelecionar) {
+        subcategoriaSelect.innerHTML = '<option value="">Carregando...</option>';
+        const resposta = await fetch(`/categorias/${categoriaId}/subcategorias`);
+        const resultado = await resposta.json();
+
+        subcategoriaSelect.innerHTML = '<option value="">Selecione uma Subcategoria...</option>';
+        if (resultado.sucesso && resultado.dados.length > 0) {
+            resultado.dados.forEach(sc => subcategoriaSelect.add(new Option(sc.nome, sc.id)));
+            subcategoriaSelect.disabled = false;
+            if (subcategoriaIdParaSelecionar) {
+                subcategoriaSelect.value = subcategoriaIdParaSelecionar;
+            }
+        } else {
+            subcategoriaSelect.disabled = true;
+        }
+    }
+
+
+    // Lógica para Deletar Meta
+    botoesDeletarMeta.forEach(botao => {
+        botao.addEventListener('click', function() {
+            const id = this.dataset.metaId;
+            if (confirm('Tem certeza que deseja deletar esta meta?')) {
+                fetch(`/metas/${id}/deletar`, { method: 'POST' })
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.sucesso) {
+                            window.location.reload();
+                        } else {
+                            alert(res.mensagem || 'Erro ao deletar meta.');
+                        }
+                    });
+            }
+        });
+    });
 });
