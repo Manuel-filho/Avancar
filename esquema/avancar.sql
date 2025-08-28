@@ -97,5 +97,28 @@ CREATE TABLE `meta` (
   CONSTRAINT `meta_ibfk_4` FOREIGN KEY (`subcategoria_id`) REFERENCES `subcategoria` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Estrutura da tabela `tarefa`
+--
+
+CREATE TABLE `tarefa` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `usuario_id` INT UNSIGNED NOT NULL,
+  `meta_id` INT UNSIGNED NOT NULL,
+  `nome` VARCHAR(255) NOT NULL,
+  `tipo_temporal` ENUM('arbitraria', 'periodo', 'hora_marcada') NOT NULL,
+  `periodo` ENUM('manha', 'tarde', 'noite') DEFAULT NULL,
+  `horario` TIME DEFAULT NULL,
+  `duracao` INT UNSIGNED NOT NULL COMMENT 'Duração em minutos',
+  `data_execucao` DATE NOT NULL,
+  `status` ENUM('pendente', 'concluida', 'nao_concluida') NOT NULL DEFAULT 'pendente',
+  `data_criacao` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `usuario_id` (`usuario_id`),
+  KEY `meta_id` (`meta_id`),
+  CONSTRAINT `tarefa_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tarefa_ibfk_2` FOREIGN KEY (`meta_id`) REFERENCES `meta` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 COMMIT;

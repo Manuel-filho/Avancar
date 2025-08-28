@@ -76,6 +76,13 @@ use App\Controladores\MetaControlador;
 $roteamento->adicionar('GET', '/metas', function() {
     return (new MetaControlador())->index();
 });
+
+use App\Controladores\TarefaControlador;
+
+// --- Rotas para Gestão de Tarefas ---
+$roteamento->adicionar('GET', '/tarefas', function() {
+    return (new TarefaControlador())->index();
+});
 $roteamento->adicionar('POST', '/metas', function() {
     return (new MetaControlador())->armazenar();
 });

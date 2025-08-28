@@ -521,6 +521,53 @@ a:hover {
     margin-top: 1rem;
 }
 
+/* Página de Gestão de Tarefas */
+.cartao-lista {
+    background-color: var(--cor-fundo-secundario);
+    border-radius: 8px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.cartao-lista table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cartao-lista th,
+.cartao-lista td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.cartao-lista th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--cor-texto-terciario);
+}
+
+.cartao-lista tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.cartao-lista tbody tr:hover {
+    background-color: var(--cor-hover);
+}
+
+.status-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-transform: capitalize;
+    color: var(--cor-texto-principal);
+}
+
+.status-badge.status-pendente { background-color: #718096; }
+.status-badge.status-concluida { background-color: #4caf50; }
+.status-badge.status-nao_concluida { background-color: #f44336; }
+
 /* Página de Gestão de Metas */
 .lista-metas {
     display: flex;
