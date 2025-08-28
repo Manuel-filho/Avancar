@@ -45,19 +45,50 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (formCategoria) {
         formCategoria.addEventListener('submit', function(evento) {
-            evento.preventDefault(); // Impede a submissão tradicional
-
+            evento.preventDefault();
             const dados = new FormData(this);
 
-            fetch('/categorias', {
-                method: 'POST',
-                body: dados
-            })
+            fetch('/categorias', { method: 'POST', body: dados })
             .then(resposta => resposta.json())
             .then(resultado => {
                 if (resultado.sucesso) {
-                    // Simplesmente recarrega a página para mostrar a nova categoria.
-                    // Uma implementação mais avançada adicionaria o item dinamicamente.
+                    window.location.reload();
+                } else {
+                    alert('Erro: ' + resultado.mensagem);
+                }
+            })
+            .catch(erro => {
+                console.error('Erro na requisição:', erro);
+                alert('Ocorreu um erro de comunicação. Tente novamente.');
+            });
+        });
+    }
+
+    // --- Lógica para Abrir e Preparar Modal de Subcategoria ---
+    const gatilhosSubcategoria = document.querySelectorAll('[data-modal-alvo="modal-subcategoria"]');
+    const inputCategoriaId = document.getElementById('subcategoria-categoria-id');
+
+    if (gatilhosSubcategoria.length > 0 && inputCategoriaId) {
+        gatilhosSubcategoria.forEach(gatilho => {
+            gatilho.addEventListener('click', function() {
+                const categoriaId = this.getAttribute('data-categoria-id');
+                inputCategoriaId.value = categoriaId;
+            });
+        });
+    }
+
+    // --- Lógica para Submissão de Formulário AJAX (Subcategoria) ---
+    const formSubcategoria = document.getElementById('formulario-subcategoria');
+
+    if (formSubcategoria) {
+        formSubcategoria.addEventListener('submit', function(evento) {
+            evento.preventDefault();
+            const dados = new FormData(this);
+
+            fetch('/subcategorias', { method: 'POST', body: dados })
+            .then(resposta => resposta.json())
+            .then(resultado => {
+                if (resultado.sucesso) {
                     window.location.reload();
                 } else {
                     alert('Erro: ' + resultado.mensagem);

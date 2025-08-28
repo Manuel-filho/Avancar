@@ -447,3 +447,58 @@ a:hover {
 .lista-itens .item-gerenciavel:hover {
     background-color: var(--cor-hover);
 }
+
+.texto-centralizado {
+    text-align: center;
+    width: 100%;
+    padding: 1rem;
+    color: var(--cor-texto-terciario);
+}
+
+.item-gerenciavel-grupo {
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.item-gerenciavel-grupo[open] > summary .icone-expansivel {
+    transform: rotate(90deg);
+}
+
+.item-gerenciavel summary {
+    list-style: none; /* Remove a seta padrão */
+    cursor: pointer;
+}
+.item-gerenciavel summary::-webkit-details-marker {
+    display: none; /* Remove a seta padrão no Chrome */
+}
+
+.icone-expansivel {
+    margin-right: 0.5rem;
+    transition: transform 0.2s ease-in-out;
+}
+
+.conteudo-subitens {
+    padding: 1rem 1rem 1rem 2.5rem; /* Adiciona indentação */
+    border-top: 1px solid var(--cor-borda);
+    background-color: rgba(0,0,0,0.1);
+}
+
+.item-gerenciavel.subitem {
+    font-size: 0.9rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--cor-primaria);
+}
+
+.texto-subitem {
+    font-size: 0.9rem;
+    color: var(--cor-texto-terciario);
+    padding: 0.5rem;
+}
+
+.botao-pequeno {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.mt-1 {
+    margin-top: 1rem;
+}

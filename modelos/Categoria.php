@@ -12,6 +12,7 @@ class Categoria {
     public int $usuario_id;
     public string $nome;
     public ?string $data_criacao;
+    public array $subcategorias = [];
 
     // Construtor para inicializar o objeto
     public function __construct(int $pilar_id, int $usuario_id, string $nome, ?int $id = null, ?string $data_criacao = null) {

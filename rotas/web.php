@@ -25,6 +25,13 @@ $roteamento->adicionar('POST', '/categorias', function() {
     return (new CategoriaControlador())->armazenar();
 });
 
+use App\Controladores\SubcategoriaControlador;
+
+// --- Rotas para Gestão de Subcategorias (AJAX) ---
+$roteamento->adicionar('POST', '/subcategorias', function() {
+    return (new SubcategoriaControlador())->armazenar();
+});
+
 // Rota para listar todos os pilares
 $roteamento->adicionar('GET', '/pilares', function() {
     return (new PilarControlador())->index();

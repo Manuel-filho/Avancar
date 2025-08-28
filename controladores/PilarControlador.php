@@ -3,6 +3,8 @@
 namespace App\Controladores;
 
 use App\Modelos\Pilar;
+use App\Modelos\Categoria;
+use App\Modelos\Subcategoria;
 
 class PilarControlador {
 
@@ -85,8 +87,11 @@ class PilarControlador {
             return;
         }
 
-        // Buscar categorias associadas a este pilar
+        // Buscar categorias e, em seguida, suas respectivas subcategorias
         $categorias = Categoria::buscarPorPilar($id);
+        foreach ($categorias as $categoria) {
+            $categoria->subcategorias = Subcategoria::buscarPorCategoria($categoria->id);
+        }
 
         $dados = [
             'titulo' => 'Detalhes do Pilar',
