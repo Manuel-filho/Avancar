@@ -49,6 +49,11 @@ $roteamento->adicionar('POST', '/categorias/{id}/deletar', function($id) {
     return (new CategoriaControlador())->deletar($id);
 });
 
+// Rota para API de subcategorias de uma categoria
+$roteamento->adicionar('GET', '/categorias/{id}/subcategorias', function($id) {
+    return (new CategoriaControlador())->listarSubcategorias($id);
+});
+
 use App\Controladores\SubcategoriaControlador;
 
 // --- Rotas para Gestão de Subcategorias (AJAX) ---
@@ -70,6 +75,9 @@ use App\Controladores\MetaControlador;
 // --- Rotas para Gestão de Metas ---
 $roteamento->adicionar('GET', '/metas', function() {
     return (new MetaControlador())->index();
+});
+$roteamento->adicionar('POST', '/metas', function() {
+    return (new MetaControlador())->armazenar();
 });
 
 // Rota para listar todos os pilares
@@ -95,4 +103,9 @@ $roteamento->adicionar('POST', '/pilares/{id}/atualizar', function($id) {
 // Rota para deletar um pilar
 $roteamento->adicionar('POST', '/pilares/{id}/deletar', function($id) {
     return (new PilarControlador())->deletar($id);
+});
+
+// Rota para API de categorias de um pilar
+$roteamento->adicionar('GET', '/pilares/{id}/categorias', function($id) {
+    return (new PilarControlador())->listarCategorias($id);
 });

@@ -125,4 +125,17 @@ class PilarControlador {
         require_once DIRETORIO_RAIZ . '/vistas/layouts/principal.php';
         return ob_get_clean();
     }
+
+    // Retorna as categorias de um pilar em formato JSON
+    public function listarCategorias(int $pilar_id) {
+        // Validação de permissão (o pilar deve pertencer ao usuário logado)
+        $pilar = Pilar::buscarPorId($pilar_id);
+        if (!$pilar || $pilar->usuario_id !== $this->usuario_id) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Pilar não encontrado ou sem permissão.'], 404);
+            return;
+        }
+
+        $categorias = Categoria::buscarPorPilar($pilar_id);
+        $this->responderJSON(['sucesso' => true, 'dados' => $categorias]);
+    }
 }

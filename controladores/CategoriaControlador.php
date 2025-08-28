@@ -3,6 +3,7 @@
 namespace App\Controladores;
 
 use App\Modelos\Categoria;
+use App\Modelos\Subcategoria;
 
 class CategoriaControlador {
 
@@ -85,5 +86,18 @@ class CategoriaControlador {
         } else {
             $this->responderJSON(['sucesso' => false, 'mensagem' => 'Erro ao deletar a categoria.'], 500);
         }
+    }
+
+    // Retorna as subcategorias de uma categoria em formato JSON
+    public function listarSubcategorias(int $categoria_id) {
+        // Validação de permissão (a categoria deve pertencer ao usuário logado)
+        $categoria = Categoria::buscarPorId($categoria_id);
+        if (!$categoria || $categoria->usuario_id !== $this->usuario_id) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Categoria não encontrada ou sem permissão.'], 404);
+            return;
+        }
+
+        $subcategorias = Subcategoria::buscarPorCategoria($categoria_id);
+        $this->responderJSON(['sucesso' => true, 'dados' => $subcategorias]);
     }
 }

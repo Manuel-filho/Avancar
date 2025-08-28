@@ -250,6 +250,18 @@ a:hover {
     line-height: 1.5;
 }
 
+.divisor-form {
+    border: none;
+    border-top: 1px solid var(--cor-borda);
+    margin: 1.5rem 0;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
 .menu-lateral-rodape {
     margin-top: auto; /* Empurra para o final */
     padding-top: 1rem;

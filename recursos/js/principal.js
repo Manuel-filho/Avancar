@@ -277,4 +277,83 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // --- Lógica para Dropdowns Dinâmicos (Formulário de Meta) ---
+    const pilarSelect = document.getElementById('meta-pilar');
+    const categoriaSelect = document.getElementById('meta-categoria');
+    const subcategoriaSelect = document.getElementById('meta-subcategoria');
+
+    if (pilarSelect) {
+        pilarSelect.addEventListener('change', function() {
+            const pilarId = this.value;
+            // Limpa e desabilita os selects seguintes
+            categoriaSelect.innerHTML = '<option value="">Carregando...</option>';
+            subcategoriaSelect.innerHTML = '<option value="">Selecione uma Subcategoria...</option>';
+            categoriaSelect.disabled = true;
+            subcategoriaSelect.disabled = true;
+
+            if (!pilarId) return;
+
+            fetch(`/pilares/${pilarId}/categorias`)
+                .then(resposta => resposta.json())
+                .then(resultado => {
+                    categoriaSelect.innerHTML = '<option value="">Selecione uma Categoria...</option>';
+                    if (resultado.sucesso) {
+                        resultado.dados.forEach(categoria => {
+                            const option = new Option(categoria.nome, categoria.id);
+                            categoriaSelect.add(option);
+                        });
+                        categoriaSelect.disabled = false;
+                    }
+                });
+        });
+    }
+
+    if (categoriaSelect) {
+        categoriaSelect.addEventListener('change', function() {
+            const categoriaId = this.value;
+            subcategoriaSelect.innerHTML = '<option value="">Carregando...</option>';
+            subcategoriaSelect.disabled = true;
+
+            if (!categoriaId) return;
+
+            fetch(`/categorias/${categoriaId}/subcategorias`)
+                .then(resposta => resposta.json())
+                .then(resultado => {
+                    subcategoriaSelect.innerHTML = '<option value="">Selecione uma Subcategoria...</option>';
+                    if (resultado.sucesso && resultado.dados.length > 0) {
+                        resultado.dados.forEach(subcategoria => {
+                            const option = new Option(subcategoria.nome, subcategoria.id);
+                            subcategoriaSelect.add(option);
+                        });
+                        subcategoriaSelect.disabled = false;
+                    } else {
+                        // Mantém desabilitado se não houver subcategorias
+                    }
+                });
+        });
+    }
+
+    // --- Lógica para Submissão de Formulário AJAX (Meta) ---
+    const formMeta = document.getElementById('formulario-meta');
+    if (formMeta) {
+        formMeta.addEventListener('submit', function(evento) {
+            evento.preventDefault();
+            const dados = new FormData(this);
+
+            fetch('/metas', { method: 'POST', body: dados })
+                .then(resposta => resposta.json())
+                .then(resultado => {
+                    if (resultado.sucesso) {
+                        window.location.reload();
+                    } else {
+                        alert('Erro: ' + (resultado.mensagem || 'Ocorreu um erro.'));
+                    }
+                })
+                .catch(erro => {
+                    console.error('Erro na requisição:', erro);
+                    alert('Ocorreu um erro de comunicação. Tente novamente.');
+                });
+        });
+    }
 });
