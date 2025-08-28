@@ -460,4 +460,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // --- Lógica para Concluir Tarefa na Página do Dia ---
+    const checkboxesTarefa = document.querySelectorAll('.checkbox-tarefa');
+    checkboxesTarefa.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const tarefaId = this.id.split('-')[1];
+            const url = `/tarefas/${tarefaId}/concluir`;
+            const itemTarefa = this.closest('.item-tarefa-dia');
+            fetch(url, { method: 'POST' })
+                .then(resposta => resposta.json())
+                .then(resultado => {
+                    if (resultado.sucesso) {
+                        if (resultado.novo_status === 'concluida') {
+                            itemTarefa.classList.add('status-concluida');
+                            itemTarefa.classList.remove('status-pendente');
+                        } else {
+                            itemTarefa.classList.remove('status-concluida');
+                            itemTarefa.classList.add('status-pendente');
+                        }
+                    } else {
+                        this.checked = !this.checked;
+                        alert(resultado.mensagem || 'Erro ao atualizar tarefa.');
+                    }
+                })
+                .catch(err => {
+                    this.checked = !this.checked;
+                    console.error('Erro de comunicação:', err);
+                    alert('Erro de comunicação.');
+                });
+        });
+    });
+
 });

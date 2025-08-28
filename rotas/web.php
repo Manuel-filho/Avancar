@@ -83,6 +83,13 @@ use App\Controladores\TarefaControlador;
 $roteamento->adicionar('GET', '/tarefas', function() {
     return (new TarefaControlador())->index();
 });
+
+use App\Controladores\DiaControlador;
+
+// Rota para a Página do Dia
+$roteamento->adicionar('GET', '/dia', function() {
+    return (new DiaControlador())->index();
+});
 $roteamento->adicionar('POST', '/tarefas', function() {
     return (new TarefaControlador())->armazenar();
 });
@@ -94,6 +101,9 @@ $roteamento->adicionar('POST', '/tarefas/{id}/atualizar', function($id) {
 });
 $roteamento->adicionar('POST', '/tarefas/{id}/deletar', function($id) {
     return (new TarefaControlador())->deletar($id);
+});
+$roteamento->adicionar('POST', '/tarefas/{id}/concluir', function($id) {
+    return (new TarefaControlador())->concluir($id);
 });
 $roteamento->adicionar('POST', '/metas', function() {
     return (new MetaControlador())->armazenar();

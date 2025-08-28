@@ -21,7 +21,7 @@
             <nav class="menu-lateral-navegacao">
                 <!-- Links de navegação serão adicionados aqui -->
                 <a href="#"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="#"><i class="fas fa-calendar-day"></i> Dia</a>
+                <a href="/dia"><i class="fas fa-calendar-day"></i> Dia</a>
                 <a href="/pilares"><i class="fas fa-columns"></i> Pilares</a>
                 <a href="/metas"><i class="fas fa-bullseye"></i> Metas</a>
                 <a href="/tarefas"><i class="fas fa-tasks"></i> Tarefas</a>

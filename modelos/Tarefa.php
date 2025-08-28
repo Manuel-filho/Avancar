@@ -116,4 +116,36 @@ class Tarefa {
         $stmt = $bd->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }
+
+    // Atualiza o status de uma tarefa
+    public static function atualizarStatus(int $id, string $status): bool {
+        $sql = "UPDATE tarefa SET status = :status WHERE id = :id";
+        $bd = BaseDados::obterInstancia();
+        $stmt = $bd->prepare($sql);
+        return $stmt->execute([':status' => $status, ':id' => $id]);
+    }
+
+    // Busca todas as tarefas de um usuário para uma data específica
+    public static function buscarPorData(int $usuario_id, string $data): array {
+        $sql = "SELECT
+                    t.*,
+                    m.nome AS meta_nome
+                FROM
+                    tarefa t
+                JOIN
+                    meta m ON t.meta_id = m.id
+                WHERE
+                    t.usuario_id = :usuario_id AND t.data_execucao = :data_execucao
+                ORDER BY
+                    t.horario ASC, t.periodo ASC";
+
+        $bd = BaseDados::obterInstancia();
+        $stmt = $bd->prepare($sql);
+        $stmt->execute([
+            ':usuario_id' => $usuario_id,
+            ':data_execucao' => $data
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, self::class);
+    }
 }

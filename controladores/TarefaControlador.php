@@ -131,4 +131,22 @@ class TarefaControlador {
             $this->responderJSON(['sucesso' => false, 'mensagem' => 'Ocorreu um erro ao deletar a tarefa.'], 500);
         }
     }
+
+    // Marca uma tarefa como concluída ou pendente
+    public function concluir(int $id) {
+        $tarefa = Tarefa::buscarPorId($id);
+        if (!$tarefa || $tarefa->usuario_id !== $this->usuario_id) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Tarefa não encontrada ou sem permissão.'], 404);
+            return;
+        }
+
+        // Alterna o status
+        $novoStatus = ($tarefa->status === 'concluida') ? 'pendente' : 'concluida';
+
+        if (Tarefa::atualizarStatus($id, $novoStatus)) {
+            $this->responderJSON(['sucesso' => true, 'novo_status' => $novoStatus]);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Erro ao atualizar o status da tarefa.'], 500);
+        }
+    }
 }
