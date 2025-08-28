@@ -8,11 +8,37 @@ use App\Modelos\Subcategoria;
 
 class PilarControlador {
 
-    // Renderiza uma página de conteúdo dentro do layout principal
-    private function renderizar(string $vista, array $dados = []): string {
-        extract($dados);
+    private int $usuario_id;
+
+    // Construtor que verifica a autenticação
+    public function __construct() {
+        if (!isset($_SESSION['usuario_id'])) {
+            header('Location: ' . URL_BASE . '/login');
+            exit();
+        }
+        $this->usuario_id = $_SESSION['usuario_id'];
+    }
+
+    // Envia uma resposta JSON padronizada
+    private function responderJSON(array $dados, int $codigo = 200): void {
+        header('Content-Type: application/json');
+        http_response_code($codigo);
+        echo json_encode($dados);
+        exit();
+    }
+
+    // Renderiza a página principal de gestão de pilares
+    public function index(): string {
+        $pilares = Pilar::buscarTodosPorUsuario($this->usuario_id);
+
+        $dados = [
+            'titulo' => 'Meus Pilares',
+            'titulo_pagina' => 'Gestão de Pilares',
+            'pilares' => $pilares,
+        ];
+
         ob_start();
-        require_once DIRETORIO_RAIZ . "/vistas/paginas/pilares/{$vista}.php";
+        require_once DIRETORIO_RAIZ . "/vistas/paginas/pilares/index.php";
         $conteudo = ob_get_clean();
 
         ob_start();
@@ -20,74 +46,65 @@ class PilarControlador {
         return ob_get_clean();
     }
 
-    // Exibe a lista de pilares do usuário
-    public function index(): string {
-        // Simulação do ID do usuário logado
-        $usuario_id = 1;
-
-        $pilares = Pilar::buscarTodosPorUsuario($usuario_id);
-
-        $dados = [
-            'titulo' => 'Meus Pilares',
-            'titulo_pagina' => 'Gestão de Pilares',
-            'pilares' => $pilares,
-        ];
-        return $this->renderizar('index', $dados);
-    }
-
-    // Exibe o formulário para criar um novo pilar
-    public function criar(): string {
-        $dados = [
-            'titulo' => 'Novo Pilar',
-            'titulo_pagina' => 'Criar Novo Pilar',
-            'acao' => '/pilares/armazenar',
-            'pilar' => null, // Nenhum pilar existente ao criar
-        ];
-        return $this->renderizar('formulario', $dados);
-    }
-
-    // Armazena um novo pilar na base de dados
+    // Armazena um novo pilar
     public function armazenar() {
-        $usuario_id = 1; // Simulação do ID do usuário logado
         $nome = $_POST['nome'] ?? '';
         $descricao = $_POST['descricao'] ?? null;
         $cor = $_POST['cor'] ?? '#6b46c1';
 
-        $pilar = new Pilar($usuario_id, $nome, $descricao, $cor);
-        $pilar->criar();
-
-        $this->redirecionar('/pilares');
-    }
-
-    // Exibe o formulário para editar um pilar existente
-    public function editar(int $id) {
-        $pilar = Pilar::buscarPorId($id);
-
-        // Validação para garantir que o pilar pertence ao usuário será necessária no futuro
-        if (!$pilar) {
-            $this->redirecionar('/pilares');
+        if (empty($nome)) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'O nome do pilar é obrigatório.'], 400);
             return;
         }
 
-        $dados = [
-            'titulo' => 'Editar Pilar',
-            'titulo_pagina' => 'Editar Pilar: ' . htmlspecialchars($pilar->nome),
-            'acao' => '/pilares/' . $id . '/atualizar',
-            'pilar' => $pilar,
-        ];
-        return $this->renderizar('formulario', $dados);
+        $pilar = new Pilar($this->usuario_id, $nome, $descricao, $cor);
+
+        if ($pilar->criar()) {
+            $this->responderJSON(['sucesso' => true, 'mensagem' => 'Pilar criado com sucesso.']);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Erro ao criar o pilar.'], 500);
+        }
     }
 
-    // Exibe a página de detalhes de um pilar
+    // Atualiza um pilar existente
+    public function atualizar(int $id) {
+        $pilar = Pilar::buscarPorId($id);
+
+        if (!$pilar || $pilar->usuario_id !== $this->usuario_id) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Pilar não encontrado ou sem permissão.'], 404);
+            return;
+        }
+
+        $pilar->nome = $_POST['nome'] ?? $pilar->nome;
+        $pilar->descricao = $_POST['descricao'] ?? $pilar->descricao;
+        $pilar->cor = $_POST['cor'] ?? $pilar->cor;
+
+        if ($pilar->atualizar()) {
+            $this->responderJSON(['sucesso' => true, 'mensagem' => 'Pilar atualizado com sucesso.']);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Erro ao atualizar o pilar.'], 500);
+        }
+    }
+
+    // Deleta um pilar
+    public function deletar(int $id) {
+        $pilar = Pilar::buscarPorId($id);
+        if ($pilar && $pilar->usuario_id === $this->usuario_id) {
+            Pilar::deletar($id);
+        }
+        header('Location: ' . URL_BASE . '/pilares');
+        exit();
+    }
+
+    // A página de detalhes continua sendo uma página completa, não um modal.
     public function mostrar(int $id) {
         $pilar = Pilar::buscarPorId($id);
 
-        if (!$pilar) {
-            $this->redirecionar('/pilares');
-            return;
+        if (!$pilar || $pilar->usuario_id !== $this->usuario_id) {
+            header('Location: ' . URL_BASE . '/pilares');
+            exit();
         }
 
-        // Buscar categorias e, em seguida, suas respectivas subcategorias
         $categorias = Categoria::buscarPorPilar($id);
         foreach ($categorias as $categoria) {
             $categoria->subcategorias = Subcategoria::buscarPorCategoria($categoria->id);
@@ -99,32 +116,13 @@ class PilarControlador {
             'pilar' => $pilar,
             'categorias' => $categorias,
         ];
-        return $this->renderizar('mostrar', $dados);
-    }
 
-    // Atualiza um pilar existente na base de dados
-    public function atualizar(int $id) {
-        $pilar = Pilar::buscarPorId($id);
+        ob_start();
+        require_once DIRETORIO_RAIZ . "/vistas/paginas/pilares/mostrar.php";
+        $conteudo = ob_get_clean();
 
-        if ($pilar) {
-            $pilar->nome = $_POST['nome'] ?? $pilar->nome;
-            $pilar->descricao = $_POST['descricao'] ?? $pilar->descricao;
-            $pilar->cor = $_POST['cor'] ?? $pilar->cor;
-            $pilar->atualizar();
-        }
-
-        $this->redirecionar('/pilares');
-    }
-
-    // Deleta um pilar da base de dados
-    public function deletar(int $id) {
-        Pilar::deletar($id);
-        $this->redirecionar('/pilares');
-    }
-
-    // Redireciona o usuário para uma URL
-    private function redirecionar(string $url): void {
-        header('Location: ' . URL_BASE . $url);
-        exit();
+        ob_start();
+        require_once DIRETORIO_RAIZ . '/vistas/layouts/principal.php';
+        return ob_get_clean();
     }
 }

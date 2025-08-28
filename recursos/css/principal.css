@@ -250,6 +250,12 @@ a:hover {
     line-height: 1.5;
 }
 
+.menu-lateral-rodape {
+    margin-top: auto; /* Empurra para o final */
+    padding-top: 1rem;
+    border-top: 1px solid var(--cor-borda);
+}
+
 .botao-icone {
     background: none;
     border: none;
@@ -501,4 +507,61 @@ a:hover {
 
 .mt-1 {
     margin-top: 1rem;
+}
+
+/* Página de Gestão de Metas */
+.lista-metas {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.cartao-meta {
+    background-color: var(--cor-fundo-secundario);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border-left: 5px solid var(--cor-primaria); /* Cor padrão */
+}
+
+.cartao-meta.status-pendente { border-left-color: #718096; }
+.cartao-meta.status-em_andamento { border-left-color: #2196f3; }
+.cartao-meta.status-concluida { border-left-color: #4caf50; }
+.cartao-meta.status-cancelada { border-left-color: #f44336; }
+
+.cartao-meta-cabecalho,
+.cartao-meta-rodape {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--cor-texto-terciario);
+    font-size: 0.8rem;
+}
+
+.cartao-meta-cabecalho {
+    margin-bottom: 1rem;
+}
+
+.cartao-meta-rodape {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--cor-borda);
+}
+
+.meta-status {
+    background-color: var(--cor-hover);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.cartao-meta-corpo h3 {
+    color: var(--cor-texto-principal);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.cartao-meta-corpo p {
+    font-size: 0.9rem;
+    line-height: 1.5;
 }

@@ -1,5 +1,8 @@
 <?php
 
+// Inicia a sessão para todas as requisições
+session_start();
+
 // Ponto de entrada principal da aplicação
 
 // Carrega as constantes globais da aplicação

@@ -21,8 +21,14 @@
                     <summary class="item-gerenciavel">
                         <span><i class="fas fa-chevron-right icone-expansivel"></i> <?= htmlspecialchars($categoria->nome) ?></span>
                         <div class="item-acoes">
-                            <button class="botao-icone" title="Editar Categoria"><i class="fas fa-edit"></i></button>
-                            <button class="botao-icone" title="Deletar Categoria"><i class="fas fa-trash"></i></button>
+                            <button class="botao-icone botao-editar-categoria" title="Editar Categoria"
+                                    data-categoria-id="<?= $categoria->id ?>"
+                                    data-modal-alvo="modal-categoria">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="botao-icone botao-deletar-categoria" title="Deletar Categoria" data-categoria-id="<?= $categoria->id ?>">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     </summary>
                     <div class="conteudo-subitens">
@@ -33,8 +39,14 @@
                                 <div class="item-gerenciavel subitem">
                                     <span><?= htmlspecialchars($subcategoria->nome) ?></span>
                                     <div class="item-acoes">
-                                        <button class="botao-icone" title="Editar Subcategoria"><i class="fas fa-edit"></i></button>
-                                        <button class="botao-icone" title="Deletar Subcategoria"><i class="fas fa-trash"></i></button>
+                                        <button class="botao-icone botao-editar-subcategoria" title="Editar Subcategoria"
+                                                data-subcategoria-id="<?= $subcategoria->id ?>"
+                                                data-modal-alvo="modal-subcategoria">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="botao-icone botao-deletar-subcategoria" title="Deletar Subcategoria" data-subcategoria-id="<?= $subcategoria->id ?>">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
                                 </div>
                             <?php endforeach; ?>

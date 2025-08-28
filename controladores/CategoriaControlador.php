@@ -6,6 +6,17 @@ use App\Modelos\Categoria;
 
 class CategoriaControlador {
 
+    private int $usuario_id;
+
+    // Construtor que verifica a autenticação
+    public function __construct() {
+        if (!isset($_SESSION['usuario_id'])) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Acesso não autorizado.'], 401);
+            return;
+        }
+        $this->usuario_id = $_SESSION['usuario_id'];
+    }
+
     // Envia uma resposta JSON padronizada
     private function responderJSON(array $dados, int $codigo = 200): void {
         header('Content-Type: application/json');
@@ -24,22 +35,55 @@ class CategoriaControlador {
 
         $nome = trim($_POST['nome']);
         $pilar_id = (int)$_POST['pilar_id'];
-        $usuario_id = 1; // Simulação do ID do usuário logado
 
         if (empty($nome) || empty($pilar_id)) {
             $this->responderJSON(['sucesso' => false, 'mensagem' => 'Nome e ID do pilar são obrigatórios.'], 400);
             return;
         }
 
-        $categoria = new Categoria($pilar_id, $usuario_id, $nome);
+        $categoria = new Categoria($pilar_id, $this->usuario_id, $nome);
 
         if ($categoria->criar()) {
-            // Para obter o ID, precisaríamos de um método que retorna o lastInsertId.
-            // Por simplicidade, vamos buscar a categoria recém-criada.
-            // Numa aplicação real, o método criar() poderia retornar o objeto criado.
             $this->responderJSON(['sucesso' => true, 'mensagem' => 'Categoria criada com sucesso.']);
         } else {
             $this->responderJSON(['sucesso' => false, 'mensagem' => 'Erro ao criar a categoria.'], 500);
+        }
+    }
+
+    // Busca os dados de uma categoria para edição
+    public function buscar(int $id) {
+        $categoria = Categoria::buscarPorId($id);
+        if ($categoria) {
+            $this->responderJSON(['sucesso' => true, 'dados' => $categoria]);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Categoria não encontrada.'], 404);
+        }
+    }
+
+    // Atualiza uma categoria existente
+    public function atualizar(int $id) {
+        $categoria = Categoria::buscarPorId($id);
+        if (!$categoria) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Categoria não encontrada.'], 404);
+            return;
+        }
+
+        // Validação de permissão virá aqui
+
+        $categoria->nome = $_POST['nome'] ?? $categoria->nome;
+        if ($categoria->atualizar()) {
+            $this->responderJSON(['sucesso' => true, 'mensagem' => 'Categoria atualizada com sucesso.']);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Erro ao atualizar a categoria.'], 500);
+        }
+    }
+
+    // Deleta uma categoria
+    public function deletar(int $id) {
+        if (Categoria::deletar($id)) {
+            $this->responderJSON(['sucesso' => true, 'mensagem' => 'Categoria deletada com sucesso.']);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Erro ao deletar a categoria.'], 500);
         }
     }
 }

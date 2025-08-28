@@ -57,4 +57,30 @@ class Subcategoria {
         $stmt = $bd->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }
+
+    // Busca uma subcategoria pelo seu ID
+    public static function buscarPorId(int $id): ?self {
+        $sql = "SELECT * FROM subcategoria WHERE id = :id";
+        $bd = BaseDados::obterInstancia();
+        $stmt = $bd->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($dados) {
+            return new self($dados['categoria_id'], $dados['usuario_id'], $dados['nome'], $dados['id'], $dados['data_criacao']);
+        }
+        return null;
+    }
+
+    // Atualiza uma subcategoria
+    public function atualizar(): bool {
+        $sql = "UPDATE subcategoria SET nome = :nome WHERE id = :id";
+        $bd = BaseDados::obterInstancia();
+        $stmt = $bd->prepare($sql);
+
+        return $stmt->execute([
+            ':nome' => $this->nome,
+            ':id' => $this->id,
+        ]);
+    }
 }

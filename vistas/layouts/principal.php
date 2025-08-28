@@ -23,7 +23,12 @@
                 <a href="#"><i class="fas fa-home"></i> Dashboard</a>
                 <a href="#"><i class="fas fa-calendar-day"></i> Dia</a>
                 <a href="/pilares"><i class="fas fa-columns"></i> Pilares</a>
+                <a href="/metas"><i class="fas fa-bullseye"></i> Metas</a>
             </nav>
+
+            <div class="menu-lateral-rodape">
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            </div>
         </aside>
 
         <!-- Conteúdo Principal -->
