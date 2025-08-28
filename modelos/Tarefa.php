@@ -48,5 +48,24 @@ class Tarefa {
         return $stmt->fetchAll(PDO::FETCH_CLASS, self::class);
     }
 
-    // TO-DO: Implementar outros métodos CRUD (criar, buscarPorId, atualizar, deletar)
+    // Cria uma nova tarefa na base de dados
+    public function criar(): bool {
+        $sql = "INSERT INTO tarefa (usuario_id, meta_id, nome, tipo_temporal, periodo, horario, duracao, data_execucao, status)
+                VALUES (:usuario_id, :meta_id, :nome, :tipo_temporal, :periodo, :horario, :duracao, :data_execucao, :status)";
+
+        $bd = BaseDados::obterInstancia();
+        $stmt = $bd->prepare($sql);
+
+        return $stmt->execute([
+            ':usuario_id' => $this->usuario_id,
+            ':meta_id' => $this->meta_id,
+            ':nome' => $this->nome,
+            ':tipo_temporal' => $this->tipo_temporal,
+            ':periodo' => $this->periodo,
+            ':horario' => $this->horario,
+            ':duracao' => $this->duracao,
+            ':data_execucao' => $this->data_execucao,
+            ':status' => $this->status,
+        ]);
+    }
 }

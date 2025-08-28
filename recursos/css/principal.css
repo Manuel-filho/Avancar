@@ -521,6 +521,19 @@ a:hover {
     margin-top: 1rem;
 }
 
+.grupo-radio {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    background-color: var(--cor-fundo-principal);
+    padding: 0.75rem;
+    border-radius: 6px;
+}
+
+.grupo-radio input {
+    margin-right: 0.25rem;
+}
+
 /* Página de Gestão de Tarefas */
 .cartao-lista {
     background-color: var(--cor-fundo-secundario);

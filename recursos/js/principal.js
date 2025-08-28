@@ -228,6 +228,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // --- Lógica para Submissão de Formulário AJAX (Tarefa) ---
+    const formTarefa = document.getElementById('formulario-tarefa');
+    if (formTarefa) {
+        formTarefa.addEventListener('submit', function(evento) {
+            evento.preventDefault();
+            const dados = new FormData(this);
+
+            fetch('/tarefas', { method: 'POST', body: dados })
+                .then(resposta => resposta.json())
+                .then(resultado => {
+                    if (resultado.sucesso) {
+                        window.location.reload();
+                    } else {
+                        alert('Erro: ' + (resultado.mensagem || 'Ocorreu um erro.'));
+                    }
+                })
+                .catch(erro => {
+                    console.error('Erro na requisição:', erro);
+                    alert('Ocorreu um erro de comunicação. Tente novamente.');
+                });
+                });
+            }
+        });
+    });
+
+    // --- Lógica para Formulário Dinâmico de Tarefas ---
+    const radiosTipoTemporal = document.querySelectorAll('input[name="tipo_temporal"]');
+    const campoPeriodo = document.getElementById('campo-periodo');
+    const campoHorario = document.getElementById('campo-horario');
+
+    if (radiosTipoTemporal.length > 0) {
+        function toggleCamposTemporais() {
+            const selecionado = document.querySelector('input[name="tipo_temporal"]:checked').value;
+
+            campoPeriodo.style.display = 'none';
+            campoHorario.style.display = 'none';
+
+            if (selecionado === 'periodo') {
+                campoPeriodo.style.display = 'block';
+            } else if (selecionado === 'hora_marcada') {
+                campoHorario.style.display = 'block';
+            }
+        }
+
+        radiosTipoTemporal.forEach(radio => {
+            radio.addEventListener('change', toggleCamposTemporais);
+        });
+
+        // Executa uma vez no início para garantir o estado correto
+        toggleCamposTemporais();
+    }
+        });
+    });
+
     // --- Lógica para Abrir e Preparar Modal de Subcategoria para EDIÇÃO ---
     const botoesEditarSubcategoria = document.querySelectorAll('.botao-editar-subcategoria');
     const modalSubcategoria = document.getElementById('modal-subcategoria');

@@ -1,6 +1,6 @@
 <div class="cabecalho-pagina">
     <h1 class="titulo-pagina">Minhas Tarefas</h1>
-    <button class="botao botao-primario" disabled>
+    <button class="botao botao-primario" data-modal-alvo="modal-tarefa">
         <i class="fas fa-plus"></i> Nova Tarefa
     </button>
 </div>
@@ -42,4 +42,21 @@
             </table>
         </div>
     <?php endif; ?>
+</div>
+
+<!-- Modal para Adicionar/Editar Tarefa -->
+<div id="modal-tarefa" class="modal">
+    <div class="modal-conteudo">
+        <div class="modal-cabecalho">
+            <h3 id="modal-tarefa-titulo">Nova Tarefa</h3>
+            <span class="modal-fechar" data-modal-fechar="true">&times;</span>
+        </div>
+        <div class="modal-corpo">
+            <?php require_once DIRETORIO_RAIZ . '/vistas/paginas/tarefas/formulario_modal.php'; ?>
+        </div>
+        <div class="modal-rodape">
+            <button type="button" class="botao botao-secundario" data-modal-fechar="true">Cancelar</button>
+            <button type="submit" form="formulario-tarefa" class="botao botao-primario">Salvar Tarefa</button>
+        </div>
+    </div>
 </div>

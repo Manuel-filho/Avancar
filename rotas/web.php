@@ -83,6 +83,9 @@ use App\Controladores\TarefaControlador;
 $roteamento->adicionar('GET', '/tarefas', function() {
     return (new TarefaControlador())->index();
 });
+$roteamento->adicionar('POST', '/tarefas', function() {
+    return (new TarefaControlador())->armazenar();
+});
 $roteamento->adicionar('POST', '/metas', function() {
     return (new MetaControlador())->armazenar();
 });
