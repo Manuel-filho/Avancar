@@ -86,6 +86,15 @@ $roteamento->adicionar('GET', '/tarefas', function() {
 $roteamento->adicionar('POST', '/tarefas', function() {
     return (new TarefaControlador())->armazenar();
 });
+$roteamento->adicionar('GET', '/tarefas/{id}', function($id) {
+    return (new TarefaControlador())->buscar($id);
+});
+$roteamento->adicionar('POST', '/tarefas/{id}/atualizar', function($id) {
+    return (new TarefaControlador())->atualizar($id);
+});
+$roteamento->adicionar('POST', '/tarefas/{id}/deletar', function($id) {
+    return (new TarefaControlador())->deletar($id);
+});
 $roteamento->adicionar('POST', '/metas', function() {
     return (new MetaControlador())->armazenar();
 });

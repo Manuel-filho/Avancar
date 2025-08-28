@@ -32,9 +32,15 @@
                             <td><?= date('d/m/Y', strtotime($tarefa->data_execucao)) ?></td>
                             <td><?= ucfirst(str_replace('_', ' ', $tarefa->tipo_temporal)) ?></td>
                             <td><span class="status-badge status-<?= $tarefa->status ?>"><?= ucfirst($tarefa->status) ?></span></td>
-                            <td>
-                                <button class="botao-icone" title="Editar"><i class="fas fa-edit"></i></button>
-                                <button class="botao-icone" title="Deletar"><i class="fas fa-trash"></i></button>
+                            <td class="acoes-tabela">
+                                <button class="botao-icone botao-editar-tarefa" title="Editar Tarefa"
+                                        data-tarefa-id="<?= $tarefa->id ?>"
+                                        data-modal-alvo="modal-tarefa">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="botao-icone botao-deletar-tarefa" title="Deletar Tarefa" data-tarefa-id="<?= $tarefa->id ?>">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                     <?php endforeach; ?>

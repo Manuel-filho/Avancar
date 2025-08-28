@@ -68,4 +68,52 @@ class Tarefa {
             ':status' => $this->status,
         ]);
     }
+
+    // Busca uma tarefa pelo seu ID
+    public static function buscarPorId(int $id): ?self {
+        $sql = "SELECT * FROM tarefa WHERE id = :id";
+        $bd = BaseDados::obterInstancia();
+        $stmt = $bd->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, self::class);
+        $stmt->execute([':id' => $id]);
+        $resultado = $stmt->fetch();
+        return $resultado ?: null;
+    }
+
+    // Atualiza os dados de uma tarefa existente
+    public function atualizar(): bool {
+        $sql = "UPDATE tarefa SET
+                    meta_id = :meta_id,
+                    nome = :nome,
+                    tipo_temporal = :tipo_temporal,
+                    periodo = :periodo,
+                    horario = :horario,
+                    duracao = :duracao,
+                    data_execucao = :data_execucao,
+                    status = :status
+                WHERE id = :id";
+
+        $bd = BaseDados::obterInstancia();
+        $stmt = $bd->prepare($sql);
+
+        return $stmt->execute([
+            ':meta_id' => $this->meta_id,
+            ':nome' => $this->nome,
+            ':tipo_temporal' => $this->tipo_temporal,
+            ':periodo' => $this->periodo,
+            ':horario' => $this->horario,
+            ':duracao' => $this->duracao,
+            ':data_execucao' => $this->data_execucao,
+            ':status' => $this->status,
+            ':id' => $this->id,
+        ]);
+    }
+
+    // Deleta uma tarefa
+    public static function deletar(int $id): bool {
+        $sql = "DELETE FROM tarefa WHERE id = :id";
+        $bd = BaseDados::obterInstancia();
+        $stmt = $bd->prepare($sql);
+        return $stmt->execute([':id' => $id]);
+    }
 }

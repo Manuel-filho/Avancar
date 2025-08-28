@@ -81,4 +81,54 @@ class TarefaControlador {
         echo json_encode($dados);
         exit();
     }
+
+    // Busca os dados de uma tarefa para edição
+    public function buscar(int $id) {
+        $tarefa = Tarefa::buscarPorId($id);
+        if ($tarefa && $tarefa->usuario_id === $this->usuario_id) {
+            $this->responderJSON(['sucesso' => true, 'dados' => $tarefa]);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Tarefa não encontrada.'], 404);
+        }
+    }
+
+    // Atualiza uma tarefa existente
+    public function atualizar(int $id) {
+        $tarefa = Tarefa::buscarPorId($id);
+        if (!$tarefa || $tarefa->usuario_id !== $this->usuario_id) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Tarefa não encontrada ou sem permissão.'], 404);
+            return;
+        }
+
+        $dados = $_POST;
+        $tarefa->meta_id = (int)($dados['meta_id'] ?? $tarefa->meta_id);
+        $tarefa->nome = trim($dados['nome']) ?? $tarefa->nome;
+        $tarefa->tipo_temporal = $dados['tipo_temporal'] ?? $tarefa->tipo_temporal;
+        $tarefa->data_execucao = $dados['data_execucao'] ?? $tarefa->data_execucao;
+        $tarefa->duracao = (int)($dados['duracao'] ?? $tarefa->duracao);
+        $tarefa->periodo = ($dados['tipo_temporal'] === 'periodo' && !empty($dados['periodo'])) ? $dados['periodo'] : null;
+        $tarefa->horario = ($dados['tipo_temporal'] === 'hora_marcada' && !empty($dados['horario'])) ? $dados['horario'] : null;
+        // O status não é editável aqui, será mudado na "Página do Dia"
+
+        if ($tarefa->atualizar()) {
+            $this->responderJSON(['sucesso' => true, 'mensagem' => 'Tarefa atualizada com sucesso!']);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Ocorreu um erro ao atualizar a tarefa.'], 500);
+        }
+    }
+
+    // Deleta uma tarefa
+    public function deletar(int $id) {
+        $tarefa = Tarefa::buscarPorId($id);
+        if (!$tarefa || $tarefa->usuario_id !== $this->usuario_id) {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Tarefa não encontrada ou sem permissão.'], 404);
+            return;
+        }
+
+        if (Tarefa::deletar($id)) {
+            $this->responderJSON(['sucesso' => true, 'mensagem' => 'Tarefa deletada com sucesso!']);
+        } else {
+            $this->responderJSON(['sucesso' => false, 'mensagem' => 'Ocorreu um erro ao deletar a tarefa.'], 500);
+        }
+    }
 }
