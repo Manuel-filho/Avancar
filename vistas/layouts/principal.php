@@ -22,6 +22,7 @@
                 <!-- Links de navegação serão adicionados aqui -->
                 <a href="#"><i class="fas fa-home"></i> Dashboard</a>
                 <a href="#"><i class="fas fa-calendar-day"></i> Dia</a>
+                <a href="/pilares"><i class="fas fa-columns"></i> Pilares</a>
             </nav>
         </aside>
 

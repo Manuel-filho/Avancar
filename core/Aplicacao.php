@@ -22,10 +22,14 @@ class Aplicacao {
         $metodo = $this->requisicao->metodo();
         $uri = $this->requisicao->uri();
 
-        $acao = $this->roteamento->encontrar($metodo, $uri);
+        $rotaEncontrada = $this->roteamento->encontrar($metodo, $uri);
 
-        if ($acao) {
-            $conteudo = call_user_func($acao);
+        if ($rotaEncontrada) {
+            $acao = $rotaEncontrada['acao'];
+            $parametros = $rotaEncontrada['parametros'];
+
+            $conteudo = call_user_func_array($acao, $parametros);
+
             $this->resposta->enviar($conteudo);
         } else {
             $this->resposta->definirCodigo(404);
