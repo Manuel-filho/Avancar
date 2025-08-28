@@ -1,0 +1,202 @@
+/* Define a paleta de cores como variáveis CSS para fácil manutenção */
+:root {
+    --cor-fundo-principal: #0d1421;
+    --cor-fundo-secundario: #1a2332;
+    --cor-borda: #2d3748;
+    --cor-hover: #4a5568;
+    --cor-primaria: #6b46c1;
+    --cor-primaria-hover: #7c3aed;
+    --cor-texto-principal: #ffffff;
+    --cor-texto-secundario: #e2e8f0;
+    --cor-texto-terciario: #cbd5e0;
+}
+
+/* Reset e Padrões Globais */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    background-color: var(--cor-fundo-principal);
+    color: var(--cor-texto-secundario);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+}
+
+a {
+    color: var(--cor-primaria);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--cor-primaria-hover);
+}
+
+/* Scrollbar Personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--cor-fundo-secundario);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--cor-hover);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--cor-primaria);
+}
+
+/* Layout Principal da Aplicação */
+.app-recipiente {
+    display: flex;
+    min-height: 100vh;
+}
+
+.menu-lateral {
+    width: 280px;
+    background-color: var(--cor-fundo-secundario);
+    border-right: 1px solid var(--cor-borda);
+    padding: 1.5rem; /* lg */
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-lateral-cabecalho h2 {
+    color: var(--cor-texto-principal);
+    font-size: 1.5rem; /* h2 */
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.menu-lateral-navegacao a {
+    display: block;
+    color: var(--cor-texto-terciario);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem; /* sm */
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-lateral-navegacao a:hover {
+    background-color: var(--cor-hover);
+    color: var(--cor-texto-principal);
+}
+
+.menu-lateral-navegacao a i {
+    margin-right: 0.75rem;
+    width: 20px;
+    text-align: center;
+}
+
+.conteudo-principal {
+    flex: 1;
+    padding: 2rem; /* xl */
+    display: flex;
+    flex-direction: column;
+}
+
+.conteudo-cabecalho {
+    margin-bottom: 2rem; /* xl */
+    border-bottom: 1px solid var(--cor-borda);
+    padding-bottom: 1rem; /* md */
+}
+
+.conteudo-cabecalho h1 {
+    font-size: 2rem; /* h1 */
+    color: var(--cor-texto-principal);
+}
+
+.conteudo {
+    flex: 1;
+}
+
+/* Estilos para Formulários e Componentes de Autenticação */
+.cartao-autenticacao {
+    max-width: 450px;
+    margin: 2rem auto;
+    background-color: var(--cor-fundo-secundario);
+    padding: 2rem; /* xl */
+    border-radius: 8px;
+    border: 1px solid var(--cor-borda);
+}
+
+.grupo-campo {
+    margin-bottom: 1.5rem; /* lg */
+}
+
+.rotulo-campo {
+    display: block;
+    margin-bottom: 0.5rem; /* sm */
+    color: var(--cor-texto-terciario);
+    font-weight: 500;
+}
+
+.rotulo-campo i {
+    margin-right: 0.5rem;
+}
+
+.entrada-campo {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--cor-fundo-principal);
+    border: 1px solid var(--cor-borda);
+    border-radius: 6px;
+    color: var(--cor-texto-secundario);
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.entrada-campo:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.3);
+}
+
+.botao {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+.botao-primario {
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-principal);
+}
+
+.botao-primario:hover {
+    background-color: var(--cor-primaria-hover);
+    color: var(--cor-texto-principal);
+}
+
+.botao-bloco {
+    width: 100%;
+    display: block;
+}
+
+.link-rodape-cartao {
+    text-align: center;
+    margin-top: 1.5rem; /* lg */
+    font-size: 0.875rem; /* Texto pequeno */
+}
+
+.link-rodape-cartao a {
+    font-weight: 600;
+}

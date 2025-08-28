@@ -1,0 +1,12 @@
+# Ativa o motor de reescrita de URL
+RewriteEngine On
+
+# Impede que a reescrita seja aplicada a diretórios existentes
+RewriteCond %{REQUEST_FILENAME} -d [OR]
+# Impede que a reescrita seja aplicada a ficheiros existentes
+RewriteCond %{REQUEST_FILENAME} -f
+# Interrompe o processamento se a condição for verdadeira
+RewriteRule ^ - [L]
+
+# Redireciona todas as outras requisições para o index.php
+RewriteRule ^ index.php [L]
