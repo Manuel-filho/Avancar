@@ -193,3 +193,29 @@
 7. `recursos/js/ajax.js`
 
 Este plano garante desenvolvimento incremental com funcionalidades testáveis a cada fase.
+
+
+
+Leia todos os documentos(raiz do repositório) com bastante atenção, para saber exatamente o o que estamos a construir, como e porque faremos isso.
+
+Algumas coisas que não estão explicitas nos documentos(vais entender após ler):
+
+todos os elementos personalizáveis(arquivos, textos, varáveis, funções, etc) devem estar em português do brasil;
+
+Nomes de abelas devem estar no singular(excepto se o plural for realmente necessário), tudo deve ser feito com o máximo profissionalismo, principalmente no que diz respeito a design de interface e experiencia de usuário;
+
+a ctack deve ser a que foi configurada sem esquecer de chamar ou usar nenhum elemento;
+
+Devemos ter uma pasta cor com classes para roteamento, aplicacao, resposta e requisicao, bem como um arquivo de configuração de rotas na pasta de rotas.
+
+os comentários devem ser usados para descrever de forma concisa o que está no código, coisas a não fazer com os comentários:
+
+Sugestões, instruções, dicas, comunicação.
+
+Elas devem ter o proposito único e exclusivo de forma concisa descrever um uma única linha o código presente
+
+Cada fase deverá ter sua própria branch, o menu lateral devera funcionar com agrupamento lógico
+
+e a hierarquia mencionada nos documentos deve ser seguida a risca e ser intuitiva para o usuário na interface.
+
+Considera absolutamente tudo antes de começar para não termos inconsistências ou faltas
