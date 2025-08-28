@@ -76,6 +76,27 @@ class PilarControlador {
         return $this->renderizar('formulario', $dados);
     }
 
+    // Exibe a página de detalhes de um pilar
+    public function mostrar(int $id) {
+        $pilar = Pilar::buscarPorId($id);
+
+        if (!$pilar) {
+            $this->redirecionar('/pilares');
+            return;
+        }
+
+        // Buscar categorias associadas a este pilar
+        $categorias = Categoria::buscarPorPilar($id);
+
+        $dados = [
+            'titulo' => 'Detalhes do Pilar',
+            'titulo_pagina' => 'Pilar: ' . htmlspecialchars($pilar->nome),
+            'pilar' => $pilar,
+            'categorias' => $categorias,
+        ];
+        return $this->renderizar('mostrar', $dados);
+    }
+
     // Atualiza um pilar existente na base de dados
     public function atualizar(int $id) {
         $pilar = Pilar::buscarPorId($id);

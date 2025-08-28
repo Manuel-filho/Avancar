@@ -40,4 +40,34 @@ CREATE TABLE `pilar` (
   CONSTRAINT `pilar_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Estrutura da tabela `categoria`
+--
+
+CREATE TABLE `categoria` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `pilar_id` INT UNSIGNED NOT NULL,
+  `usuario_id` INT UNSIGNED NOT NULL,
+  `nome` VARCHAR(255) NOT NULL,
+  `data_criacao` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `pilar_id` (`pilar_id`),
+  CONSTRAINT `categoria_ibfk_1` FOREIGN KEY (`pilar_id`) REFERENCES `pilar` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Estrutura da tabela `subcategoria`
+--
+
+CREATE TABLE `subcategoria` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `categoria_id` INT UNSIGNED NOT NULL,
+  `usuario_id` INT UNSIGNED NOT NULL,
+  `nome` VARCHAR(255) NOT NULL,
+  `data_criacao` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `categoria_id` (`categoria_id`),
+  CONSTRAINT `subcategoria_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 COMMIT;

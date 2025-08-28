@@ -18,6 +18,12 @@ $roteamento->adicionar('GET', '/registo', function() {
 // --- Rotas para Gestão de Pilares ---
 
 use App\Controladores\PilarControlador;
+use App\Controladores\CategoriaControlador;
+
+// --- Rotas para Gestão de Categorias (AJAX) ---
+$roteamento->adicionar('POST', '/categorias', function() {
+    return (new CategoriaControlador())->armazenar();
+});
 
 // Rota para listar todos os pilares
 $roteamento->adicionar('GET', '/pilares', function() {
@@ -27,6 +33,11 @@ $roteamento->adicionar('GET', '/pilares', function() {
 // Rota para exibir o formulário de criação de pilar
 $roteamento->adicionar('GET', '/pilares/criar', function() {
     return (new PilarControlador())->criar();
+});
+
+// Rota para exibir os detalhes de um pilar
+$roteamento->adicionar('GET', '/pilares/{id}', function($id) {
+    return (new PilarControlador())->mostrar($id);
 });
 
 // Rota para armazenar um novo pilar (recebe dados do formulário)

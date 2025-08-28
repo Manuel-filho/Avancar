@@ -307,3 +307,143 @@ a:hover {
 .botao-secundario:hover {
     background-color: #5a6678; /* um pouco mais escuro */
 }
+
+/* Componente Modal */
+.modal {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo escurecido */
+    padding-top: 60px;
+}
+
+.modal-conteudo {
+    background-color: var(--cor-fundo-secundario);
+    margin: 5% auto;
+    padding: 2rem;
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+    animation: animar-modal 0.3s ease-out;
+}
+
+.modal-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--cor-borda);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.modal-cabecalho h3 {
+    color: var(--cor-texto-principal);
+    font-size: 1.5rem;
+}
+
+.modal-fechar {
+    color: var(--cor-texto-terciario);
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.modal-fechar:hover,
+.modal-fechar:focus {
+    color: var(--cor-primaria);
+    text-decoration: none;
+}
+
+.modal-corpo {
+    padding: 1rem 0;
+}
+
+.modal-rodape {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-top: 1px solid var(--cor-borda);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+@keyframes animar-modal {
+    from {
+        top: -200px;
+        opacity: 0;
+    }
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+/* Estilos para a página de detalhes do Pilar */
+.cartao-pilar-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.pilar-detalhes-cabecalho {
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.pilar-detalhes-cabecalho h2 {
+    font-size: 1.75rem;
+    color: var(--cor-texto-principal);
+    margin-top: 0.5rem;
+}
+
+.pilar-detalhes-cabecalho .pilar-descricao {
+    font-size: 1rem;
+    color: var(--cor-texto-terciario);
+    margin-top: 0.5rem;
+}
+
+.link-voltar {
+    font-size: 0.9rem;
+    color: var(--cor-primaria);
+}
+
+.secao-gerenciamento {
+    background-color: var(--cor-fundo-secundario);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.secao-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.secao-cabecalho h3 {
+    font-size: 1.25rem;
+    color: var(--cor-texto-principal);
+}
+
+.lista-itens .item-gerenciavel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.lista-itens .item-gerenciavel:hover {
+    background-color: var(--cor-hover);
+}
